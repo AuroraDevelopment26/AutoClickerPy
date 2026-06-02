@@ -346,6 +346,7 @@ class AutoClicker:
         self.root.withdraw()
 
         import tempfile
+        import subprocess
         try:
             path = os.path.join(tempfile.gettempdir(), "AutoClicker_Update_Setup.exe")
             req = Request(url, headers={"User-Agent": "AutoClicker/1.0"})
@@ -356,7 +357,11 @@ class AutoClicker:
                         if not chunk:
                             break
                         f.write(chunk)
-            os.startfile(path)
+            subprocess.Popen(
+                [path, "/SP-", "/NORESTART"],
+                creationflags=subprocess.DETACHED_PROCESS,
+                close_fds=True
+            )
         except Exception:
             messagebox.showerror("Fehler", "Download fehlgeschlagen.")
         finally:
