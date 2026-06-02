@@ -10,7 +10,7 @@ from urllib.error import URLError
 from pynput import mouse, keyboard
 
 
-APP_VERSION = "1.0"
+APP_VERSION = "1.1"
 UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt"
 CONFIG_FILE = "autoclicker_config.json"
 
@@ -37,8 +37,9 @@ class AutoClicker:
     def __init__(self, root):
         self.root = root
         self.root.title("AutoClicker")
-        self.root.geometry("400x350")
+        self.root.geometry("420x380")
         self.root.resizable(False, False)
+        self.root.configure(bg="#1e1e2e")
 
         self.clicking = False
         self.running = True
@@ -53,6 +54,7 @@ class AutoClicker:
         self.click_type = tk.StringVar(value="Single")
         self.hotkey = tk.StringVar(value="F6")
 
+        self._setup_styles()
         self._set_icon()
         self._load_config()
         self._build_ui()
@@ -116,32 +118,50 @@ class AutoClicker:
         with open(CONFIG_FILE, "w") as f:
             json.dump(d, f, indent=2)
 
+    def _setup_styles(self):
+        style = ttk.Style()
+        style.theme_use("clam")
+        style.configure("TFrame", background="#1e1e2e")
+        style.configure("TLabel", background="#1e1e2e", foreground="#cdd6f4",
+                        font=("Segoe UI", 9))
+        style.configure("TButton", background="#313244", foreground="#cdd6f4",
+                        font=("Segoe UI", 9), borderwidth=1, focusthickness=0)
+        style.map("TButton", background=[("active", "#45475a")])
+        style.configure("Bold.TLabel", font=("Segoe UI", 10, "bold"),
+                        background="#1e1e2e", foreground="#cdd6f4")
+        style.configure("Accent.TButton", background="#89b4fa",
+                        foreground="#1e1e2e", font=("Segoe UI", 10, "bold"))
+        style.map("Accent.TButton", background=[("active", "#74c7ec")])
+        style.configure("TSeparator", background="#45475a")
+        style.configure("TCombobox", fieldbackground="#313244",
+                        background="#313244", foreground="#cdd6f4",
+                        arrowcolor="#cdd6f4")
+        style.map("TCombobox", fieldbackground=[("readonly", "#313244")])
+        style.configure("TSpinbox", fieldbackground="#313244",
+                        background="#313244", foreground="#cdd6f4",
+                        arrowcolor="#cdd6f4")
+
     def _build_ui(self):
         main = ttk.Frame(self.root, padding=20)
         main.pack(fill=tk.BOTH, expand=True)
 
-        # ── Intervall ──
-        ttk.Label(main, text="Intervall", font=("Segoe UI", 10, "bold")).grid(
+        ttk.Label(main, text="Intervall", style="Bold.TLabel").grid(
             row=0, column=0, columnspan=4, sticky=tk.W, pady=(0, 6)
         )
 
         for i, txt in enumerate(["Std", "Min", "Sek", "ms"]):
-            ttk.Label(main, text=txt, font=("Segoe UI", 8)).grid(
-                row=1, column=i, padx=2
-            )
+            ttk.Label(main, text=txt).grid(row=1, column=i, padx=2)
 
         self._spinbox(main, self.interval_h, 0, 23, 2, 0)
         self._spinbox(main, self.interval_m, 0, 59, 2, 1)
         self._spinbox(main, self.interval_s, 0, 59, 2, 2)
         self._spinbox(main, self.interval_ms, 0, 999, 2, 3)
 
-        # ── Separator ──
         ttk.Separator(main, orient="horizontal").grid(
             row=3, column=0, columnspan=4, sticky=tk.EW, pady=16
         )
 
-        # ── Maustaste ──
-        ttk.Label(main, text="Maustaste", font=("Segoe UI", 10, "bold")).grid(
+        ttk.Label(main, text="Maustaste", style="Bold.TLabel").grid(
             row=4, column=0, sticky=tk.W, pady=(0, 6)
         )
         btn_c = ttk.Combobox(main, textvariable=self.click_button,
@@ -149,8 +169,7 @@ class AutoClicker:
                              state="readonly", width=16)
         btn_c.grid(row=4, column=1, columnspan=2, sticky=tk.W, padx=(10, 0))
 
-        # ── Klick-Typ ──
-        ttk.Label(main, text="Klick-Typ", font=("Segoe UI", 10, "bold")).grid(
+        ttk.Label(main, text="Klick-Typ", style="Bold.TLabel").grid(
             row=5, column=0, sticky=tk.W, pady=(8, 6)
         )
         type_c = ttk.Combobox(main, textvariable=self.click_type,
@@ -158,8 +177,7 @@ class AutoClicker:
                               state="readonly", width=16)
         type_c.grid(row=5, column=1, columnspan=2, sticky=tk.W, padx=(10, 0))
 
-        # ── Hotkey ──
-        ttk.Label(main, text="Shortcut", font=("Segoe UI", 10, "bold")).grid(
+        ttk.Label(main, text="Shortcut", style="Bold.TLabel").grid(
             row=6, column=0, sticky=tk.W, pady=(8, 6)
         )
         hk_c = ttk.Combobox(main, textvariable=self.hotkey,
@@ -167,37 +185,33 @@ class AutoClicker:
         hk_c.grid(row=6, column=1, columnspan=2, sticky=tk.W, padx=(10, 0))
         hk_c.bind("<<ComboboxSelected>>", lambda e: self._start_listener())
 
-        # ── Separator ──
         ttk.Separator(main, orient="horizontal").grid(
             row=7, column=0, columnspan=4, sticky=tk.EW, pady=16
         )
 
-        # ── Status + Count ──
         status_frame = ttk.Frame(main)
         status_frame.grid(row=8, column=0, columnspan=4, sticky=tk.EW, pady=(0, 10))
 
         self.status_label = ttk.Label(status_frame, text="Gestoppt",
-                                       font=("Segoe UI", 10, "bold"))
+                                       style="Bold.TLabel")
         self.status_label.pack(side=tk.LEFT)
 
-        self.count_label = ttk.Label(status_frame, text="Klicks: 0",
-                                     font=("Segoe UI", 9))
+        self.count_label = ttk.Label(status_frame, text="Klicks: 0")
         self.count_label.pack(side=tk.RIGHT)
 
-        # ── Toggle Button ──
         self.toggle_btn = ttk.Button(
-            main, text="Starten (F6)", command=self.toggle
+            main, text="Starten (F6)", style="Accent.TButton",
+            command=self.toggle
         )
         self.toggle_btn.grid(row=9, column=0, columnspan=4, sticky=tk.EW,
                               ipady=6)
 
-        # ── Update Button ──
         update_frame = ttk.Frame(main)
         update_frame.grid(row=10, column=0, columnspan=4, pady=(6, 0))
         ttk.Button(update_frame, text="Nach Updates suchen",
                    command=self._check_update).pack(side=tk.LEFT)
         self.update_label = ttk.Label(update_frame, text="",
-                                      font=("Segoe UI", 8))
+                                       font=("Segoe UI", 8))
         self.update_label.pack(side=tk.LEFT, padx=(8, 0))
 
     def _spinbox(self, parent, var, lo, hi, row, col):
@@ -216,10 +230,10 @@ class AutoClicker:
     def _update_status(self):
         if self.clicking:
             self.status_label.config(text="Aktiv - Klickt...",
-                                     foreground="#107c10")
+                                     foreground="#a6e3a1")
             self.toggle_btn.config(text="Stoppen (F6)")
         else:
-            self.status_label.config(text="Gestoppt", foreground="#d32f2f")
+            self.status_label.config(text="Gestoppt", foreground="#f38ba8")
             self.toggle_btn.config(text="Starten (F6)")
 
     def toggle(self):
