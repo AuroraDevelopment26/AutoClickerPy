@@ -7,7 +7,7 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 
 VERSION = "1.0"
-UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/4ac2eddd2a74e19899fefc55425be2bbcfaa2f83/gistfile1.txt"
+UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt"
 USER_AGENT = "AutoClicker-Updater/1.0"
 
 

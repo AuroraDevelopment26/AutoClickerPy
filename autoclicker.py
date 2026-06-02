@@ -11,7 +11,7 @@ from pynput import mouse, keyboard
 
 
 APP_VERSION = "1.0"
-UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/4ac2eddd2a74e19899fefc55425be2bbcfaa2f83/gistfile1.txt"
+UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt"
 CONFIG_FILE = "autoclicker_config.json"
 
 HOTKEY_DISPLAY = [
