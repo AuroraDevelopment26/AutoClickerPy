@@ -22,16 +22,4 @@ Ein einfacher, aber leistungsfähiger AutoClicker für Windows.
 2. Mit **F6** (oder eigenem Shortcut) starten/stoppen
 3. Intervall und Maustaste nach Wunsch einstellen
 
-## Development
 
-```bash
-pip install pynput
-python autoclicker.py
-```
-
-## Build
-
-```bash
-pip install pynput pyinstaller pillow
-pyinstaller --onefile --windowed --name AutoClicker --icon icon.ico autoclicker.py
-```
