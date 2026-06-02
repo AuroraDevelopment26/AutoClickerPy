@@ -4,16 +4,25 @@ import threading
 import time
 import json
 import os
+import sys
 import ctypes
 from urllib.request import urlopen, Request
 from pynput import mouse, keyboard
 
-CONFIG_FILE = "autoclicker_config.json"
+
+def _app_path():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(__file__)
+
+
+def _config_path():
+    return os.path.join(_app_path(), "autoclicker_config.json")
 
 
 def _read_config(key, default=None):
     try:
-        with open(CONFIG_FILE) as f:
+        with open(_config_path()) as f:
             return json.load(f).get(key, default)
     except Exception:
         return default
@@ -263,10 +272,11 @@ class AutoClicker:
         self.listener.start()
 
     def _load_config(self):
-        if not os.path.exists(CONFIG_FILE):
+        p = _config_path()
+        if not os.path.exists(p):
             return
         try:
-            with open(CONFIG_FILE) as f:
+            with open(p) as f:
                 d = json.load(f)
             self.interval_h.set(d.get("h", 0))
             self.interval_m.set(d.get("m", 0))
@@ -290,7 +300,7 @@ class AutoClicker:
             "type": self.click_type.get(),
             "hotkey": self.hotkey.get(),
         }
-        with open(CONFIG_FILE, "w") as f:
+        with open(_config_path(), "w") as f:
             json.dump(d, f, indent=2)
 
     def _check_update_silent(self):
