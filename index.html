@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoClicker – Aurora Development</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #1e1e2e;
+    color: #cdd6f4;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+  .card {
+    background: #313244;
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  }
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #89b4fa;
+    margin-bottom: .5rem;
+  }
+  .sub {
+    color: #6c7086;
+    font-size: .9rem;
+    margin-bottom: 2rem;
+  }
+  .version-badge {
+    display: inline-block;
+    background: #45475a;
+    color: #a6e3a1;
+    padding: .25rem .75rem;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .btn {
+    display: inline-block;
+    background: #89b4fa;
+    color: #1e1e2e;
+    text-decoration: none;
+    padding: .85rem 2.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: background .2s, transform .1s;
+    margin-bottom: 1.5rem;
+  }
+  .btn:hover { background: #74c7ec; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .6rem;
+    text-align: left;
+    margin: 1.5rem 0;
+  }
+  .features span {
+    background: #45475a;
+    padding: .4rem .8rem;
+    border-radius: 8px;
+    font-size: .85rem;
+    color: #bac2de;
+  }
+  .features span::before { content: "▸ "; color: #89b4fa; }
+  .footer {
+    margin-top: 2rem;
+    font-size: .8rem;
+    color: #585b70;
+  }
+  .footer a { color: #585b70; text-decoration: none; }
+  .footer a:hover { color: #89b4fa; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>◆ AutoClicker</h1>
+  <p class="sub">Aurora Development</p>
+  <span class="version-badge" id="version">v1.2</span>
+  <br>
+  <a class="btn" href="https://github.com/AnimaDev24/AutoClickerPy/releases" target="_blank">Letzte Version herunterladen</a>
+  <div class="features">
+    <span>Konfigurierbares Intervall</span>
+    <span>Links / Rechts / Mitte</span>
+    <span>Single- & Doppelklick</span>
+    <span>Frei wählbarer Shortcut</span>
+    <span>Automatische Update-Prüfung</span>
+    <span>Modernes Dark-Design</span>
+  </div>
+  <p style="font-size:.85rem;color:#6c7086;">
+    <a href="https://github.com/AnimaDev24/AutoClickerPy" style="color:#89b4fa;">GitHub</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/AnimaDev24/AutoClickerPy/releases" style="color:#89b4fa;">Releases</a>
+  </p>
+</div>
+<div class="footer">
+  &copy; Aurora Development &mdash; <a href="https://github.com/AnimaDev24/AutoClickerPy">Open Source on GitHub</a>
+</div>
+<script>
+  fetch('https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt')
+    .then(r => r.json())
+    .then(d => { document.getElementById('version').textContent = 'v' + d.version; })
+    .catch(() => {});
+</script>
+</body>
+</html>
