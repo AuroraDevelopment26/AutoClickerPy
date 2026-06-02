@@ -10,7 +10,7 @@ from urllib.error import URLError
 from pynput import mouse, keyboard
 
 
-APP_VERSION = "1.1"
+APP_VERSION = "1.2"
 UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt"
 CONFIG_FILE = "autoclicker_config.json"
 
@@ -305,16 +305,16 @@ class AutoClicker:
             "Update verfügbar",
             f"Version {version} ist verfügbar.\n"
             f"Aktuelle Version: {APP_VERSION}\n\n"
-            "Download und Installation jetzt starten?"
+            "Die App wird geschlossen und der Download gestartet."
         ):
-            self.update_label.config(text="Lade Update...", foreground="#555")
-            self.root.update_idletasks()
-            threading.Thread(
-                target=self._download_update, args=(installer_url,),
-                daemon=True
-            ).start()
+            self._download_and_close(installer_url)
 
-    def _download_update(self, url):
+    def _download_and_close(self, url):
+        self.clicking = False
+        self.running = False
+        self.listener.stop()
+        self.root.withdraw()
+
         import tempfile
         try:
             path = os.path.join(tempfile.gettempdir(),
@@ -328,11 +328,10 @@ class AutoClicker:
                             break
                         f.write(chunk)
             os.startfile(path)
-            self.root.after(0, lambda: self.update_label.config(
-                text="Update wird installiert...", foreground="#107c10"))
         except Exception:
-            self.root.after(0, lambda: self.update_label.config(
-                text="Download fehlgeschlagen", foreground="#d32f2f"))
+            messagebox.showerror("Fehler", "Download fehlgeschlagen.")
+        finally:
+            self.root.destroy()
 
     def _click_loop(self):
         ctrl = mouse.Controller()

@@ -6,7 +6,7 @@ import webbrowser
 from urllib.request import urlopen, Request
 from urllib.error import URLError
 
-VERSION = "1.1"
+VERSION = "1.2"
 UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt"
 USER_AGENT = "AutoClicker-Updater/1.0"
 
