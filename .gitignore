@@ -9,4 +9,5 @@ build_exe.bat
 Autoclicker START.bat
 create_icon.py
 create_ico.py
+installer.iss
 requirements.txt
