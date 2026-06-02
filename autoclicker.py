@@ -10,9 +10,25 @@ from urllib.error import URLError
 from pynput import mouse, keyboard
 
 
-APP_VERSION = "1.2"
-UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt"
 CONFIG_FILE = "autoclicker_config.json"
+DEFAULT_VERSION = "1.2"
+DEFAULT_UPDATE_URL = "https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt"
+
+
+def _read_config(key, default):
+    try:
+        with open(CONFIG_FILE) as f:
+            return json.load(f).get(key, default)
+    except Exception:
+        return default
+
+
+def get_app_version():
+    return _read_config("version", DEFAULT_VERSION)
+
+
+def get_update_url():
+    return _read_config("update_url", DEFAULT_UPDATE_URL)
 
 HOTKEY_DISPLAY = [
     "F6", "F7", "F8", "F9",
@@ -107,6 +123,8 @@ class AutoClicker:
 
     def _save_config(self):
         d = {
+            "version": get_app_version(),
+            "update_url": get_update_url(),
             "h": self.interval_h.get(),
             "m": self.interval_m.get(),
             "s": self.interval_s.get(),
@@ -249,14 +267,7 @@ class AutoClicker:
     # ── Update Check ──
 
     def _get_update_url(self):
-        return self._config_get("update_url", UPDATE_URL)
-
-    def _config_get(self, key, default):
-        try:
-            with open(CONFIG_FILE) as f:
-                return json.load(f).get(key, default)
-        except Exception:
-            return default
+        return get_update_url()
 
     def _check_update_silent(self):
         time.sleep(3)
@@ -282,11 +293,12 @@ class AutoClicker:
             if not remote or not installer:
                 return
 
-            if self._is_newer(remote, APP_VERSION):
+            app_ver = get_app_version()
+            if self._is_newer(remote, app_ver):
                 self.root.after(0, lambda: self._ask_update(remote, installer))
             elif not silent:
                 self.root.after(0, lambda: self.update_label.config(
-                    text=f"v{APP_VERSION} ist aktuell", foreground="#107c10"))
+                    text=f"v{app_ver} ist aktuell", foreground="#107c10"))
         except Exception:
             if not silent:
                 self.root.after(0, lambda: self.update_label.config(
@@ -301,10 +313,11 @@ class AutoClicker:
             return False
 
     def _ask_update(self, version, installer_url):
+        app_ver = get_app_version()
         if messagebox.askyesno(
             "Update verfügbar",
             f"Version {version} ist verfügbar.\n"
-            f"Aktuelle Version: {APP_VERSION}\n\n"
+            f"Aktuelle Version: {app_ver}\n\n"
             "Die App wird geschlossen und der Download gestartet."
         ):
             self._download_and_close(installer_url)
