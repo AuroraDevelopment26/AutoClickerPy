@@ -86,7 +86,6 @@ class AutoClicker:
         self._build_ui()
         self._start_listener()
         self._update_status()
-        self._update_version_label()
         
         # Variablen für das Verschieben des Fensters per Maus
         self._start_x = 0
@@ -145,7 +144,8 @@ class AutoClicker:
         title_label.pack(pady=(5, 2))
         
         # FEHLER BEHOBEN: 'text_spacing' wurde hier entfernt, da es von CTkLabel nicht unterstützt wird
-        sub_label = ctk.CTkLabel(container, text="AURORA DEVELOPMENT", font=("Plus Jakarta Sans", 9, "bold"), text_color="#6c7086")
+        app_version = get_app_version()
+        sub_label = ctk.CTkLabel(container, text=f"AURORA DEVELOPMENT  •  v{app_version}", font=("Plus Jakarta Sans", 9, "bold"), text_color="#6c7086")
         sub_label.pack(pady=(0, 20))
 
         # --- SEKTION: INTERVALL ---
@@ -218,9 +218,6 @@ class AutoClicker:
         self.update_label = ctk.CTkLabel(update_frame, text="", font=("Plus Jakarta Sans", 11), text_color="#6c7086")
         self.update_label.pack(side=tk.LEFT, padx=(10, 0))
 
-        self.version_label = ctk.CTkLabel(update_frame, text="", font=("Plus Jakarta Sans", 10), text_color="#585b70")
-        self.version_label.pack(side=tk.RIGHT, padx=4)
-
     # Fenster-Bewegungs-Logik per Mauszug
     def _on_press(self, event):
         self._start_x = event.x
@@ -239,10 +236,6 @@ class AutoClicker:
                     self.interval_ms.get() / 1000)
         except Exception:
             return 0.1
-
-    def _update_version_label(self):
-        ver = get_app_version()
-        self.version_label.configure(text=f"v{ver}")
 
     def _update_status(self):
         current_hotkey = self.hotkey.get()
