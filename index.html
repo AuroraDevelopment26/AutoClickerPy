@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AutoClicker – Aurora Development</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght400;500;600;700;800&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-    background: #0f0f1a;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: #0b0b14;
     color: #cdd6f4;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 2rem 1rem;
     position: relative;
     overflow-x: hidden;
   }
@@ -25,12 +26,13 @@
   body::before {
     content: '';
     position: fixed;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(137,180,250,.12) 0%, transparent 70%);
-    top: -200px;
-    right: -200px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(137, 180, 250, 0.12) 0%, transparent 70%);
+    top: -150px;
+    right: -100px;
     pointer-events: none;
+    z-index: 0;
   }
 
   body::after {
@@ -38,24 +40,30 @@
     position: fixed;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(166,227,161,.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(203, 166, 247, 0.08) 0%, transparent 70%);
     bottom: -150px;
-    left: -150px;
+    left: -100px;
     pointer-events: none;
+    z-index: 0;
   }
 
   .card {
-    background: rgba(49, 50, 68, .6);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,.06);
-    border-radius: 24px;
-    padding: 3.5rem 3rem;
-    max-width: 500px;
+    background: rgba(24, 24, 37, 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 28px;
+    padding: 3.5rem 2.5rem;
+    max-width: 480px;
     width: 100%;
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,.5);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
     position: relative;
-    animation: fadeIn .6s ease-out;
+    z-index: 1;
+    /* Flexbox sorgt hier dafür, dass alles untereinander zentriert wird */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @keyframes fadeIn {
@@ -63,189 +71,207 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .icon {
-    width: 56px;
-    height: 56px;
-    background: linear-gradient(135deg, #89b4fa, #b4befe);
-    border-radius: 16px;
+  .icon-wrapper {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #b4befe, #89b4fa);
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
-    margin: 0 auto 1.25rem;
-    box-shadow: 0 8px 24px rgba(137,180,250,.3);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 12px 32px rgba(137, 180, 250, 0.3);
+    color: #11111b;
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 800;
-    letter-spacing: -.02em;
-    background: linear-gradient(135deg, #89b4fa, #b4befe);
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #ffffff 40%, #a6adc8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: .25rem;
+    margin-bottom: 0.35rem;
+    text-align: center;
   }
 
   .sub {
-    color: #585b70;
-    font-size: .85rem;
-    font-weight: 500;
-    letter-spacing: .03em;
-    margin-bottom: 1.75rem;
+    color: #6c7086;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    text-align: center;
   }
 
   .version-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: .75rem;
-    margin-bottom: 2rem;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+    background: rgba(17, 17, 27, 0.5);
+    padding: 0.5rem 1.25rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
   }
 
   .version-badge {
-    background: rgba(166,227,161,.12);
-    color: #a6e3a1;
-    padding: .35rem 1rem;
-    border-radius: 100px;
-    font-size: .8rem;
+    color: #89b4fa;
+    font-size: 0.8rem;
     font-weight: 700;
-    border: 1px solid rgba(166,227,161,.15);
   }
 
   .dot {
-    width: 6px;
-    height: 6px;
-    background: #585b70;
+    width: 4px;
+    height: 4px;
+    background: #45475a;
     border-radius: 50%;
   }
 
   .update-status {
-    font-size: .75rem;
-    color: #585b70;
+    font-size: 0.8rem;
+    color: #9399b2;
+    font-weight: 500;
   }
 
   .btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: .5rem;
-    background: linear-gradient(135deg, #89b4fa, #b4befe);
-    color: #0f0f1a;
+    justify-content: center;
+    gap: 0.75rem;
+    background: #ffffff;
+    color: #11111b;
     text-decoration: none;
-    padding: .9rem 2.25rem;
-    border-radius: 12px;
+    padding: 1rem 2.5rem;
+    border-radius: 16px;
     font-weight: 700;
-    font-size: .95rem;
-    transition: transform .15s, box-shadow .2s;
-    box-shadow: 0 4px 16px rgba(137,180,250,.25);
-    margin-bottom: 2rem;
+    font-size: 1rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+    margin-bottom: 2.5rem;
+    width: 100%; /* Nimmt jetzt die volle Breite der Card ein */
   }
 
   .btn:hover {
+    background: #89b4fa;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(137,180,250,.35);
+    box-shadow: 0 12px 30px rgba(137, 180, 250, 0.35);
   }
-
-  .btn:active { transform: translateY(0); }
 
   .features {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: .5rem;
-    text-align: left;
-    margin: 0 0 2rem;
+    gap: 0.75rem;
+    width: 100%; /* Volle Breite für das Grid */
+    margin-bottom: 2.5rem;
   }
 
   .features span {
-    background: rgba(69, 71, 90, .4);
-    padding: .5rem .85rem;
-    border-radius: 10px;
-    font-size: .82rem;
+    background: rgba(30, 30, 46, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    font-size: 0.82rem;
     color: #bac2de;
     font-weight: 500;
-    transition: background .15s;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
   }
 
-  .features span:hover { background: rgba(69, 71, 90, .7); }
+  .features span:hover { 
+    background: rgba(49, 50, 68, 0.5);
+    color: #cdd6f4;
+  }
 
   .features span::before {
     content: "";
-    display: inline-block;
+    display: block;
     width: 6px;
     height: 6px;
     background: #89b4fa;
-    border-radius: 2px;
-    margin-right: .5rem;
-    vertical-align: middle;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
 
   .links {
     display: flex;
     justify-content: center;
     gap: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 1.5rem;
+    width: 100%;
   }
 
   .links a {
-    color: #585b70;
+    color: #7f849c;
     text-decoration: none;
-    font-size: .82rem;
-    font-weight: 500;
-    transition: color .15s;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: color 0.15s;
   }
 
   .links a:hover { color: #89b4fa; }
 
   .footer {
-    margin-top: 2.5rem;
-    font-size: .75rem;
-    color: #45475a;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: #585b70;
+    z-index: 1;
+    text-align: center;
   }
 
-  .footer a { color: #45475a; text-decoration: none; }
-  .footer a:hover { color: #585b70; }
+  .footer a { color: #7f849c; text-decoration: none; font-weight: 500; }
+  .footer a:hover { color: #89b4fa; }
 
   @media (max-width: 480px) {
-    .card { padding: 2rem 1.5rem; }
-    .features { grid-template-columns: 1fr; }
+    .card { padding: 2.5rem 1.5rem; }
+    .features { grid-template-columns: 1fr; gap: 0.5rem; }
   }
 </style>
 </head>
 <body>
+
 <div class="card">
-  <div class="icon">◆</div>
+  <div class="icon-wrapper">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="7"/><path d="M12 2v6"/></svg>
+  </div>
   <h1>AutoClicker</h1>
-  <p class="sub">AURORA DEVELOPMENT</p>
+  <p class="sub">Aurora Development</p>
 
   <div class="version-row">
     <span class="version-badge" id="version">v1.2</span>
     <span class="dot"></span>
-    <span class="update-status" id="updateStatus">Checke Update...</span>
+    <span class="update-status" id="updateStatus">Prüfe Update...</span>
   </div>
 
   <a class="btn" href="https://github.com/AnimaDev24/AutoClickerPy/releases/download/v1.2/AutoClicker_v1.2_Setup.exe" target="_blank">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    Download
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download für Windows
   </a>
 
   <div class="features">
-    <span>Frei einstellbares Intervall</span>
-    <span>Links / Rechts / Mitte</span>
-    <span>Single- & Doppelklick</span>
-    <span>Frei wählbarer Shortcut</span>
-    <span>Automatische Update-Prüfung</span>
-    <span>Modernes Dark-Design</span>
+    <span>Freies Intervall</span>
+    <span>L / R / Mitte Klick</span>
+    <span>Single & Doppel</span>
+    <span>Eigener Shortcut</span>
+    <span>Auto-Update Check</span>
+    <span>Modernes Dark UI</span>
   </div>
 
   <div class="links">
     <a href="https://github.com/AnimaDev24/AutoClickerPy" target="_blank">GitHub</a>
     <a href="https://github.com/AnimaDev24/AutoClickerPy/releases" target="_blank">Releases</a>
     <a href="https://github.com/AnimaDev24/AutoClickerPy/issues" target="_blank">Feedback</a>
-    <a href="https://github.com/AnimaDev24/AutoClickerPy/releases" target="_blank">Alle Versionen</a>
   </div>
 </div>
 
 <div class="footer">
-  &copy; Aurora Development &mdash; <a href="https://github.com/AnimaDev24/AutoClickerPy" target="_blank">Open Source</a>
+  &copy; Aurora Development &bull; <a href="https://github.com/AnimaDev24/AutoClickerPy" target="_blank">Open Source</a>
 </div>
 
 <script>
@@ -260,9 +286,11 @@
         sEl.style.color = '#a6e3a1';
       })
       .catch(function() {
-        sEl.textContent = 'Keine Verbindung';
+        sEl.textContent = 'Offline';
+        sEl.style.color = '#f38ba8';
       });
   })();
 </script>
+
 </body>
 </html>
