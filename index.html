@@ -5,115 +5,263 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AutoClicker – Aurora Development</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: #1e1e2e;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: #0f0f1a;
     color: #cdd6f4;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
     padding: 2rem;
+    position: relative;
+    overflow-x: hidden;
   }
+
+  body::before {
+    content: '';
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(137,180,250,.12) 0%, transparent 70%);
+    top: -200px;
+    right: -200px;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(166,227,161,.08) 0%, transparent 70%);
+    bottom: -150px;
+    left: -150px;
+    pointer-events: none;
+  }
+
   .card {
-    background: #313244;
-    border-radius: 16px;
-    padding: 3rem 2.5rem;
-    max-width: 520px;
+    background: rgba(49, 50, 68, .6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 24px;
+    padding: 3.5rem 3rem;
+    max-width: 500px;
     width: 100%;
-    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,.5);
+    position: relative;
+    animation: fadeIn .6s ease-out;
   }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #89b4fa, #b4befe);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 1.25rem;
+    box-shadow: 0 8px 24px rgba(137,180,250,.3);
+  }
+
   h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #89b4fa;
-    margin-bottom: .5rem;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    background: linear-gradient(135deg, #89b4fa, #b4befe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: .25rem;
   }
+
   .sub {
-    color: #6c7086;
-    font-size: .9rem;
+    color: #585b70;
+    font-size: .85rem;
+    font-weight: 500;
+    letter-spacing: .03em;
+    margin-bottom: 1.75rem;
+  }
+
+  .version-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
     margin-bottom: 2rem;
   }
+
   .version-badge {
-    display: inline-block;
-    background: #45475a;
+    background: rgba(166,227,161,.12);
     color: #a6e3a1;
-    padding: .25rem .75rem;
-    border-radius: 20px;
+    padding: .35rem 1rem;
+    border-radius: 100px;
     font-size: .8rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-  }
-  .btn {
-    display: inline-block;
-    background: #89b4fa;
-    color: #1e1e2e;
-    text-decoration: none;
-    padding: .85rem 2.5rem;
-    border-radius: 10px;
     font-weight: 700;
-    font-size: 1.05rem;
-    transition: background .2s, transform .1s;
-    margin-bottom: 1.5rem;
+    border: 1px solid rgba(166,227,161,.15);
   }
-  .btn:hover { background: #74c7ec; transform: translateY(-1px); }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    background: #585b70;
+    border-radius: 50%;
+  }
+
+  .update-status {
+    font-size: .75rem;
+    color: #585b70;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: linear-gradient(135deg, #89b4fa, #b4befe);
+    color: #0f0f1a;
+    text-decoration: none;
+    padding: .9rem 2.25rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: .95rem;
+    transition: transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 16px rgba(137,180,250,.25);
+    margin-bottom: 2rem;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(137,180,250,.35);
+  }
+
   .btn:active { transform: translateY(0); }
+
   .features {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: .6rem;
+    gap: .5rem;
     text-align: left;
-    margin: 1.5rem 0;
+    margin: 0 0 2rem;
   }
+
   .features span {
-    background: #45475a;
-    padding: .4rem .8rem;
-    border-radius: 8px;
-    font-size: .85rem;
+    background: rgba(69, 71, 90, .4);
+    padding: .5rem .85rem;
+    border-radius: 10px;
+    font-size: .82rem;
     color: #bac2de;
+    font-weight: 500;
+    transition: background .15s;
   }
-  .features span::before { content: "▸ "; color: #89b4fa; }
-  .footer {
-    margin-top: 2rem;
-    font-size: .8rem;
+
+  .features span:hover { background: rgba(69, 71, 90, .7); }
+
+  .features span::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #89b4fa;
+    border-radius: 2px;
+    margin-right: .5rem;
+    vertical-align: middle;
+  }
+
+  .links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .links a {
     color: #585b70;
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 500;
+    transition: color .15s;
   }
-  .footer a { color: #585b70; text-decoration: none; }
-  .footer a:hover { color: #89b4fa; }
+
+  .links a:hover { color: #89b4fa; }
+
+  .footer {
+    margin-top: 2.5rem;
+    font-size: .75rem;
+    color: #45475a;
+  }
+
+  .footer a { color: #45475a; text-decoration: none; }
+  .footer a:hover { color: #585b70; }
+
+  @media (max-width: 480px) {
+    .card { padding: 2rem 1.5rem; }
+    .features { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 <div class="card">
-  <h1>◆ AutoClicker</h1>
-  <p class="sub">Aurora Development</p>
-  <span class="version-badge" id="version">v1.2</span>
-  <br>
-  <a class="btn" href="https://github.com/AnimaDev24/AutoClickerPy/releases" target="_blank">Letzte Version herunterladen</a>
+  <div class="icon">◆</div>
+  <h1>AutoClicker</h1>
+  <p class="sub">AURORA DEVELOPMENT</p>
+
+  <div class="version-row">
+    <span class="version-badge" id="version">v1.2</span>
+    <span class="dot"></span>
+    <span class="update-status" id="updateStatus">Checke Update...</span>
+  </div>
+
+  <a class="btn" href="https://github.com/AnimaDev24/AutoClickerPy/releases" target="_blank">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download
+  </a>
+
   <div class="features">
-    <span>Konfigurierbares Intervall</span>
+    <span>Frei einstellbares Intervall</span>
     <span>Links / Rechts / Mitte</span>
     <span>Single- & Doppelklick</span>
     <span>Frei wählbarer Shortcut</span>
     <span>Automatische Update-Prüfung</span>
     <span>Modernes Dark-Design</span>
   </div>
-  <p style="font-size:.85rem;color:#6c7086;">
-    <a href="https://github.com/AnimaDev24/AutoClickerPy" style="color:#89b4fa;">GitHub</a>
-    &nbsp;·&nbsp;
-    <a href="https://github.com/AnimaDev24/AutoClickerPy/releases" style="color:#89b4fa;">Releases</a>
-  </p>
+
+  <div class="links">
+    <a href="https://github.com/AnimaDev24/AutoClickerPy" target="_blank">GitHub</a>
+    <a href="https://github.com/AnimaDev24/AutoClickerPy/releases" target="_blank">Releases</a>
+    <a href="https://github.com/AnimaDev24/AutoClickerPy/issues" target="_blank">Feedback</a>
+  </div>
 </div>
+
 <div class="footer">
-  &copy; Aurora Development &mdash; <a href="https://github.com/AnimaDev24/AutoClickerPy">Open Source on GitHub</a>
+  &copy; Aurora Development &mdash; <a href="https://github.com/AnimaDev24/AutoClickerPy" target="_blank">Open Source</a>
 </div>
+
 <script>
-  fetch('https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt')
-    .then(r => r.json())
-    .then(d => { document.getElementById('version').textContent = 'v' + d.version; })
-    .catch(() => {});
+  (function() {
+    var vEl = document.getElementById('version');
+    var sEl = document.getElementById('updateStatus');
+    fetch('https://gist.githubusercontent.com/AnimaDev24/4aef74220ecad2f569e06b6027a2199e/raw/gistfile1.txt')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        vEl.textContent = 'v' + d.version;
+        sEl.textContent = 'Aktuell';
+        sEl.style.color = '#a6e3a1';
+      })
+      .catch(function() {
+        sEl.textContent = 'Keine Verbindung';
+      });
+  })();
 </script>
 </body>
 </html>
